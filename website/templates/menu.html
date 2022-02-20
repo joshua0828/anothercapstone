@@ -1,0 +1,44 @@
+{% extends "base.html" %} {% block title %}Menu{% endblock %}
+
+{% block content%}
+
+<div class="album py-5 bg-light">
+    <h1 align="center">Menu</h1>
+    <div class="container">
+      <div class="row">
+        {% for item in items %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+              <title>Placeholder</title>
+              <rect width="100%" height="100%" style="background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftherecipecritic.com%2Fwp-content%2Fuploads%2F2018%2F08%2Fzucchini_crust_pizza-1-of-1-1-667x1000.jpg&f=1&nofb=1');"/>
+            </svg>
+            <div class="card-body">
+              <p class="card-text">{{ item.name }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="{{ url_for ('views.item', id=item.id) }}"><button type="button" class="btn btn-sm btn-outline-secondary">View</button></a>
+                  <form action="{{url_for('views.getcart')}}" method="post">
+                    <input type="hidden" name='item_id' value={{items.id}}>
+                    {% if current_user.is_authenticated %}
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Add to Cart</button>
+                    {% endif %}
+                    </select>
+                </form>
+                </div>
+                <small class="text-muted">${{ item.price }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+  <script type="text/javascript" src="../static/index.js"></script>
+
+
+
+{% endblock %}

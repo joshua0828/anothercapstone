@@ -1,0 +1,59 @@
+{% extends "base.html" %} {% block title %}Cart{% endblock %}
+
+{% block content%}
+</br></br>
+<div class="card">
+    <link rel="stylesheet" href="../static/cart.css">
+    <div class="row">
+        <div class="col-md-8 cart">
+            <div class="title">
+                <div class="row">
+                    <div class="col">
+                        <h4><b>Cart</b></h4>
+                    </div>
+                    <div class="col align-self-center text-right text-muted"></div>
+                    
+                </div>
+            </div>
+            <div class="row border-top border-bottom">
+                <div class="row main align-items-center">
+                    <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
+                    <div class="col">
+                        <div class="row text-muted">Large Pizza</div>
+                        <div class="row">Supreme Pizza</div>
+                    </div>
+                    <div class="col"> <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a> </div>
+                    <div class="col">$ 19.99 <span class="close">&#10005;</span></div>
+                </div>
+            </div>
+     
+
+            <div class="back-to-shop"><a href="#">&leftarrow; Back to shop</a><span class="text-muted"></span></div>
+        </div>
+        <div class="col-md-4 summary">
+            <div>
+                <h5><b>Summary</b></h5>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col" style="padding-left:0;">3 items: </div>
+                <div class="col text-right">$ 29.97</div>
+            </div>
+            <form>
+                <p>Tip Online?</p> <input id="tip" placeholder="Amount in dollars"></input>
+                <p>Promo Code</p> <input id="code" placeholder="Enter promo code"></input>
+            </form>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="col">TOTAL PRICE</div>
+                <div class="col text-right">$ 31.50</div>
+            </div> 
+            
+            <form action="/create-checkout-session" method="POST">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Checkout</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

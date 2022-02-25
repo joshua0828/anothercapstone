@@ -1,7 +1,8 @@
 {% extends "base.html" %} {% block title %}Cart{% endblock %}
-
+{% block cart %}{{rows}}{% endblock %}
 {% block content%}
 </br></br>
+
 <div class="card">
     <link rel="stylesheet" href="../static/cart.css">
     <div class="row">
@@ -15,20 +16,25 @@
                     
                 </div>
             </div>
-            <div class="row border-top border-bottom">
+            {% for items in item %}
+            <div class="row border-top border-bottom">   
                 <div class="row main align-items-center">
                     <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/1GrakTl.jpg"></div>
                     <div class="col">
-                        <div class="row text-muted">Large Pizza</div>
-                        <div class="row">Supreme Pizza</div>
+                        <div class="row text-muted">{{ items.name }}</div>
                     </div>
                     <div class="col"> <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a> </div>
-                    <div class="col">$ 19.99 <span class="close">&#10005;</span></div>
+                    <div class="col">${{ items.price }}<span class="close">&#10005;</span></div>
                 </div>
             </div>
+            {% endfor %}
      
-
-            <div class="back-to-shop"><a href="#">&leftarrow; Back to shop</a><span class="text-muted"></span></div>
+            <br/><br/>
+            <div class="buttons-inside-cart">
+                <a href="{{ url_for ('views.menu') }}">&leftarrow; Back to shop</a><span class="text-muted"></span>
+                <a href="#">&#10005; Remove all items</a><span class="text-muted"></span>
+            </div>
+ 
         </div>
         <div class="col-md-4 summary">
             <div>
@@ -36,7 +42,7 @@
             </div>
             <hr>
             <div class="row">
-                <div class="col" style="padding-left:0;">3 items: </div>
+                <div class="col" style="padding-left:0;">{{rows}} items: </div>
                 <div class="col text-right">$ 29.97</div>
             </div>
             <form>

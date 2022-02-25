@@ -1,6 +1,8 @@
 # database models
 
 from locale import currency
+
+from sqlalchemy import PrimaryKeyConstraint
 from . import db
 from flask_login import UserMixin
 
@@ -20,3 +22,7 @@ class Items(db.Model):
     description = db.Column(db.String(500))
     item_image = db.Column(db.String(40))
 
+class Cart(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150))
+    price = db.Column(db.Integer)

@@ -1,6 +1,8 @@
 {% extends "base.html" %} {% block title %}Item{% endblock %}
-
+{% block cart %}{{rows}}{% endblock %}
 {% block content%}
+
+
 <div class="album py-5 bg-light">
     <h1 align="center">{{ current_item.name }}</h1>
     <div class="container">
@@ -11,14 +13,32 @@
           <label for="id_{{topping}}">{{ topping }}</label><br>
           {% endfor %}
         </p>
-        <form action="{{url_for('views.getcart')}}" method="POST">
-          <input type="hidden" name='item_id' value={{current_item.id}}>
+        
+        <form method="POST">
+          <div class="form-group">
+            <label for="name"></label>
+            <input 
+            type="hidden"
+            id="name" 
+            name="name" 
+            value="{{current_item.name}}"
+            />
+          </div>
+          
+          <div class="form-group">
+            <label for="price"></label>
+            <input
+            type="hidden"
+            id="price"
+            name="price"
+            value="{{current_item.price}}"
+            />
+          </div>
+          
           {% if current_user.is_authenticated %}
           <button type="submit" class="btn btn-sm btn-outline-secondary">Add to Cart</button>
           {% endif %}
-          </select>
       </form>
-       
-  </div>
-
+    </div>
+</div>
 {% endblock %}

@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% block title %}Menu{% endblock %}
-
+{% block cart %}{{rows}}{% endblock %}
 {% block content%}
+<script type="text/javascript" src="../static/addToCart.js"></script>
 
 <div class="album py-5 bg-light">
     <h1 align="center">Menu</h1>
@@ -18,13 +19,8 @@
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
                   <a href="{{ url_for ('views.item', id=item.id) }}"><button type="button" class="btn btn-sm btn-outline-secondary">View</button></a>
-                  <form action="{{url_for('views.getcart')}}" method="post">
-                    <input type="hidden" name='item_id' value={{items.id}}>
-                    {% if current_user.is_authenticated %}
-                    <button type="submit" class="btn btn-sm btn-outline-secondary">Add to Cart</button>
-                    {% endif %}
-                    </select>
-                </form>
+                    <button onClick="addToCart(price1, image1)" class="btn btn-sm btn-outline-secondary">Add to Cart</button>
+
                 </div>
                 <small class="text-muted">${{ item.price }}</small>
               </div>
@@ -35,9 +31,6 @@
       </div>
     </div>
   </div>
-
-
-  <script type="text/javascript" src="../static/index.js"></script>
 
 
 

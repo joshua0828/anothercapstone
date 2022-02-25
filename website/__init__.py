@@ -27,16 +27,14 @@ def create_app():
     app.register_blueprint(views, url_prefix='/') # registering blueprints routes from views.py
     app.register_blueprint(auth, url_prefix='/') # registering blueprints routes from auth.py 
 
-    from .models import User, Items # ensures database classes are created when starting up server
-
-   
-
+    from .models import User # ensures database classes are created when starting up server
     create_database(app) # created database
     
     # login stuff
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
+    
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
@@ -44,8 +42,8 @@ def create_app():
     return app # end of create app
 
 
-# the function that creates database
+# the function that creates database if its not already 
 def create_database(app):
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
-        print('Created Database!')
+        # print('Created Database!')

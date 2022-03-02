@@ -1,7 +1,6 @@
 # create standard routes
 
 
-from crypt import methods
 from distutils.command.config import config
 from flask import Blueprint, render_template, flash, request, request_started, session, url_for, redirect
 from flask_login import login_required, current_user

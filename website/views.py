@@ -1,6 +1,7 @@
 # create standard routes
 
 
+from crypt import methods
 from distutils.command.config import config
 from flask import Blueprint, render_template, flash, request, request_started, session, url_for, redirect
 from flask_login import login_required, current_user
@@ -37,6 +38,18 @@ def item(id):
     rows = Cart.query.filter(Cart.id).count()
     return render_template('item.html', user=current_user, current_item=get_items()[id - 1], rows = rows)
 
+@views.route('/delete/<int:id>')
+def delete(id):
+  item_to_delete = Cart.query.get_or_404(id)
+  try:
+    db.session.delete(item_to_delete)
+    db.session.commit()
+    flash('Item removed from cart')
+    return redirect(url_for('views.cart'))
+  except:
+    flash('Problem removing item from cart')
+    return redirect(url_for('views.cart'))
+
 @views.route('/cart', methods=['GET', 'POST'])
 def cart():
   rows = Cart.query.filter(Cart.id).count()
@@ -56,7 +69,7 @@ def create_checkout_session():
       'quantity': 1,
     }],
     mode='payment',
-    success_url='http://127.0.0.1:5000/successful', 
+    success_url='http://127.0.0.1:5000/successful',
     cancel_url='http://127.0.0.1:5000/cart',
   )
     return redirect(session.url, code=303)
@@ -91,5 +104,3 @@ def get_cart_items():
     grabber['price'] = cart.price
     test_cart_items.append(grabber)
   return test_cart_items
-
-    

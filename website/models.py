@@ -26,3 +26,4 @@ class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
     price = db.Column(db.Integer)
+    quantity = db.Column(db.Integer)

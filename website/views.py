@@ -35,7 +35,7 @@ def item(id):
     return redirect(url_for('views.cart'))
   else:
     rows = Cart.query.filter(Cart.id).count()
-    return render_template('item.html', user=current_user, current_item=get_items()[id - 1], rows = rows)
+    return render_template('item.html', user=current_user, current_item=get_items()[id-1], rows = rows)
 
 @views.route('/delete/<int:id>')
 def delete(id):
@@ -87,6 +87,7 @@ def admin():
     add_item = Items(name=name, price=price, description=description)
     db.session.add(add_item)
     db.session.commit()
+    ids = [id[0] for id in Items.query.with_entities(Items.id).all()] # fixed
     flash('Added to Menu', category='success')
     return redirect(url_for('views.admin'))
 
@@ -103,12 +104,18 @@ def remove_menu_item(id):
   try:
     db.session.delete(item_to_delete)
     db.session.commit()
+    ids = [id[0] for id in Items.query.with_entities(Items.id).all()] # fixed
+    new_id = 1
+    for i in ids:
+      _id = Items.query.get(i)
+      _id.id = new_id
+      new_id += 1
+      db.session.commit()
     flash('Item removed from menu')
     return redirect(url_for('views.admin'))
   except:
     flash('Problem removing item from cart')
     return redirect(url_for('views.admin'))
-
 
 def get_items():
   ids = [id[0] for id in Items.query.with_entities(Items.id).all()] # fixed
@@ -116,7 +123,7 @@ def get_items():
   for id in ids:
     item = Items.query.filter_by(id=id).first()
     grabber = {'id': 0, 'name': '', 'price': 0, 'desc': '', 'img': '', 'toppings': ['']}
-    grabber['id'] = id
+    grabber['id'] = item.id
     grabber['name'] = item.name
     grabber['price'] = item.price
     grabber['desc'] = item.description

@@ -1,8 +1,7 @@
 {% extends "base.html" %} {% block title %}Item{% endblock %}
 {% block cart %}{{rows}}{% endblock %}
 {% block content%}
-
-
+{{current_item.id}}
 <div class="album py-5 bg-light">
     <h1 align="center">{{ current_item.name }}</h1>
     <div class="container">

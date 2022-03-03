@@ -1,0 +1,78 @@
+{% extends "base.html" %} {% block title %}Cart{% endblock %}
+{% block cart %}{{rows}}{% endblock %}
+
+{% block content%}
+<br/>
+<form method="POST">
+    <h3 align="center">Add Menu Item</h3>
+
+    <div class="form-group">
+      <label for="name">Item Name</label>
+      <input
+        type="name"
+        class="form-control"
+        id="name"
+        name="name"
+        placeholder="Item name"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input
+        type="description"
+        class="form-control"
+        id="description"
+        name="description"
+        placeholder="Item description"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input
+        type="price"
+        class="form-control"
+        id="price"
+        name="price"
+        placeholder="Enter price"
+      />
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Add Item</button>
+  </form>
+
+  <br/><br/>
+
+
+  <div class="album py-5 bg-light">
+    <h3 align="center">Remove Menu Item</h3>
+    <div class="container">
+      <div class="row">
+        {% for item in items %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+              <title>Placeholder</title>
+              <rect width="100%" height="100%" style="background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftherecipecritic.com%2Fwp-content%2Fuploads%2F2018%2F08%2Fzucchini_crust_pizza-1-of-1-1-667x1000.jpg&f=1&nofb=1');"/>
+            </svg>
+            <div class="card-body">
+              <p class="card-text">{{ item.name }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <a href="{{ url_for ('views.item', id=item.id) }}"><button type="button" class="btn btn-sm btn-outline-secondary">Edit</button></a>
+                  <a href="  {{ url_for ('views.remove_menu_item', id=item.id) }}"><button type="button" class="btn btn-sm btn-outline-secondary">Delete</button></a>
+                </div>
+                <small class="text-muted">${{ item.price }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

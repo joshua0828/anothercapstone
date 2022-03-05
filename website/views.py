@@ -9,7 +9,6 @@ import stripe
 from .models import Items, Cart
 from . import db
 
-
 views = Blueprint('views', __name__)
 stripe.api_key = 'sk_test_51KOEoTEAaICJ0GdRPRiVmPSZIQQ9DVtzWqeNtuevHa01p74QcR5wCNOrPdisWya0OheTal3B6kIy7Tuk987Cuk3l00n89yrf6y'
 
@@ -50,15 +49,9 @@ def delete(id):
     flash('Problem removing item from cart')
     return redirect(url_for('views.cart'))
 
-
-
-
 @views.route('/clearcart')
 def clearcart():
   return redirect(url_for('views.cart'))
-
-
-
 
 @views.route('/cart', methods=['GET', 'POST'])
 def cart():
@@ -155,7 +148,7 @@ def get_cart_items():
       if _name == cart.name:
         grabber['quantity'] += 1
         for _item in range(len(test_cart_items)):
-          if test_cart_items[_item]['name'] in names and test_cart_items[_item]['quantity'] < grabber['quantity']:
+          if test_cart_items[_item]['name'] in names and test_cart_items[_item]['quantity'] < grabber['quantity'] and grabber['name'] == test_cart_items[_item]['name']:
             del test_cart_items[_item]
             break
     names.append(cart.name)

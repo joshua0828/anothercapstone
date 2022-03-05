@@ -24,7 +24,7 @@
                     <div class="col">
                         <div class="row text-muted">{{ items.name }}</div>
                     </div>
-                    <div class="col"> <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a> </div>
+                    <div class="col"> <a href="#">-</a><a href="#" class="border">{{ items.quantity }}</a><a href="#">+</a> </div>
                     <div class="col">${{ items.price }}
                         <span class="close">
                             <a href="{{ url_for('views.delete', id=items.id)}}">&#10005;</a> 

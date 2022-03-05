@@ -38,3 +38,4 @@ class Cart(db.Model):
     option2Name = db.Column(db.String(150))
     option1price = db.Column(db.Integer)
     option2price = db.Column(db.Integer)
+    quantity = db.Column(db.Integer)

@@ -33,6 +33,16 @@
             value="{{current_item.price}}"
             />
           </div>
+
+          <div class="form-group">
+            <label for="quantity"></label>
+            <input
+            type="hidden"
+            id="quantity"
+            name="quantity"
+            value="{{1}}"
+            />
+          </div>
           
           {% if current_user.is_authenticated %}
           <button type="submit" class="btn btn-sm btn-outline-secondary">Add to Cart</button>

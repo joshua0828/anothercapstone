@@ -28,7 +28,8 @@ def item(id):
   if request.method == 'POST':
     name = request.form.get('name')
     price = request.form.get('price')
-    cart_item = Cart(name=name, price=price)
+    quantity = request.form.get('quantity')
+    cart_item = Cart(name=name, price=price, quantity=quantity)
     db.session.add(cart_item)
     db.session.commit()
     flash('Added to cart!', category='success')
@@ -48,6 +49,16 @@ def delete(id):
   except:
     flash('Problem removing item from cart')
     return redirect(url_for('views.cart'))
+
+
+
+
+@views.route('/clearcart')
+def clearcart():
+  return redirect(url_for('views.cart'))
+
+
+
 
 @views.route('/cart', methods=['GET', 'POST'])
 def cart():
@@ -87,10 +98,8 @@ def admin():
     add_item = Items(name=name, price=price, description=description)
     db.session.add(add_item)
     db.session.commit()
-    ids = [id[0] for id in Items.query.with_entities(Items.id).all()] # fixed
     flash('Added to Menu', category='success')
     return redirect(url_for('views.admin'))
-
   user_id = current_user.id
   if user_id != 1:
     return redirect(url_for('views.home'))
@@ -134,11 +143,21 @@ def get_items():
 def get_cart_items():
   ids = [id[0] for id in Cart.query.with_entities(Cart.id).all()]
   test_cart_items = []
+  names = []
   for id in ids:
     cart = Cart.query.filter_by(id=id).first()
-    grabber = {'id': 0, 'name': '', 'price': 0}
+    grabber = {'id': 0, 'name': '', 'price': 0, 'quantity': 0}
     grabber['id'] = id
-    grabber['name'] = cart.name
     grabber['price'] = cart.price
+    grabber['quantity'] = cart.quantity
+    grabber['name'] = cart.name
+    for _name in names:
+      if _name == cart.name:
+        grabber['quantity'] += 1
+        for _item in range(len(test_cart_items)):
+          if test_cart_items[_item]['name'] in names and test_cart_items[_item]['quantity'] < grabber['quantity']:
+            del test_cart_items[_item]
+            break
+    names.append(cart.name)
     test_cart_items.append(grabber)
   return test_cart_items

@@ -51,6 +51,15 @@ def delete(id):
 
 @views.route('/clearcart')
 def clearcart():
+  num_of_items_in_cart = [id[0] for id in Cart.query.with_entities(Cart.id).all()]
+  for item in num_of_items_in_cart:
+    item_to_delete = Cart.query.get_or_404(item)
+    try:
+      db.session.delete(item_to_delete)
+      db.session.commit()
+    except:
+      flash('Problem removing ', item_to_delete.name, ' from cart.' )
+  flash('All items removed from cart!')
   return redirect(url_for('views.cart'))
 
 @views.route('/cart', methods=['GET', 'POST'])

@@ -24,25 +24,22 @@
                     <div class="col">
                         <div class="row text-muted">{{ items.name }}</div>
                     </div>
-                    <div class="col"> <a href="#">-</a><a href="#" class="border">{{ items.quantity }}</a><a href="#">+</a> </div>
+                    <div class="col"> <a href="#">-</a><a class="border">{{ items.quantity }}</a><a href="#">+</a> </div>
                     <div class="col">${{ items.price }}
                         <span class="close">
-                            <a href="{{ url_for('views.delete', id=items.id)}}">&#10005;</a> 
+                            <a href="{{ url_for('views.delete', id=items.id)}}">&#10005;</a>
                         </span>
                     </div>
                 </div>
             </div>
             {% endfor %}
-    
+            {% if rows == 0 %}
+                <p>There are currently no items in your cart. Add some now by browsing the menu.</p>
+            {% endif %}
             <br/><br/>
             <div class="buttons-inside-cart">
                 <a href="{{ url_for ('views.menu') }}">&leftarrow; Back to shop</a><span class="text-muted"></span>
-
-
-                
-                <a href="#">&#10005; Remove all items</a><span class="text-muted"></span>
-            
-            
+                <a href="{{ url_for ('views.clearcart') }}">&#10005; Remove all items</a><span class="text-muted"></span>
             </div>
 
         </div>

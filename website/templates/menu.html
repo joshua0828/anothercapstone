@@ -9,9 +9,12 @@
         {% for item in items %}
         <div class="col-md-4">
           <div class="card mb-4 shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
-              <title>Placeholder</title>
-              <rect width="100%" height="100%" style="background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftherecipecritic.com%2Fwp-content%2Fuploads%2F2018%2F08%2Fzucchini_crust_pizza-1-of-1-1-667x1000.jpg&f=1&nofb=1');"/>
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225">
+              <image width="100%" height="405"
+                 class="eq__NEcontainer__currentAlarmAction"
+                 xlink:href="../static/pictures/{{item.img}}"></image>
+              <rect width="100%" height="405" class="eq__NEcontainer__currentAlarmAction"
+            style="fill:url(#godhelpme);">
             </svg>
             <div class="card-body">
               <p class="card-text">{{ item.name }}</p>

@@ -4,10 +4,12 @@
 from distutils.command.config import config
 from flask import Blueprint, render_template, flash, request, request_started, session, url_for, redirect
 from flask_login import login_required, current_user
+from werkzeug.utils import secure_filename
 import stripe
+import os
 # added import for 'Items' table
 from .models import Items, Cart
-from . import db
+from . import db, UPLOAD_FOLDER, ALLOWED_EXTENSIONS
 
 views = Blueprint('views', __name__)
 stripe.api_key = 'sk_test_51KOEoTEAaICJ0GdRPRiVmPSZIQQ9DVtzWqeNtuevHa01p74QcR5wCNOrPdisWya0OheTal3B6kIy7Tuk987Cuk3l00n89yrf6y'
@@ -97,7 +99,12 @@ def admin():
     name = request.form.get('name')
     price = request.form.get('price')
     description = request.form.get('description')
-    add_item = Items(name=name, price=price, description=description)
+    image = request.files['image']
+    if image and allowed_file(image.filename):
+      filename = secure_filename(image.filename)
+      image.save(os.path.join(UPLOAD_FOLDER, filename))
+    imagename = filename
+    add_item = Items(name=name, price=price, description=description, item_image=imagename)
     db.session.add(add_item)
     db.session.commit()
     flash('Added to Menu', category='success')
@@ -163,3 +170,7 @@ def get_cart_items():
     names.append(cart.name)
     test_cart_items.append(grabber)
   return test_cart_items
+
+def allowed_file(filename):
+    return '.' in filename and \
+            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS

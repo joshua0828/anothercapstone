@@ -1,176 +1,28 @@
 # create standard routes
+# contains:
+# 1. home function (home.html)
+# 2. successful function (successful.html)
+
+from flask import Blueprint, render_template
+from flask_login import current_user
+from .models import Cart
 
 
-from distutils.command.config import config
-from flask import Blueprint, render_template, flash, request, request_started, session, url_for, redirect
-from flask_login import login_required, current_user
-from werkzeug.utils import secure_filename
-import stripe
-import os
-# added import for 'Items' table
-from .models import Items, Cart
-from . import db, UPLOAD_FOLDER, ALLOWED_EXTENSIONS
-
+# this is our blueprint for views. this also needs to be declared in init
 views = Blueprint('views', __name__)
-stripe.api_key = 'sk_test_51KOEoTEAaICJ0GdRPRiVmPSZIQQ9DVtzWqeNtuevHa01p74QcR5wCNOrPdisWya0OheTal3B6kIy7Tuk987Cuk3l00n89yrf6y'
 
-@views.route('/', methods=['GET', 'POST'])
+# this is our function for home.html it holds all python code needed in order to properly display the page
+@views.route('/')
 def home():
+  # find the number of items in cart
   rows = Cart.query.filter(Cart.id).count()
   return render_template("home.html", user=current_user, rows=rows)
 
-@views.route('/menu', methods=['GET', 'POST'])
-def menu():
-    rows = Cart.query.filter(Cart.id).count()
-    return render_template('menu.html', user=current_user, items=get_items(), rows=rows)
-
-@views.route('/item/<int:id>', methods=['GET', 'POST'])
-def item(id):
-  if request.method == 'POST':
-    name = request.form.get('name')
-    price = request.form.get('price')
-    quantity = request.form.get('quantity')
-    cart_item = Cart(name=name, price=price, quantity=quantity)
-    db.session.add(cart_item)
-    db.session.commit()
-    flash('Added to cart!', category='success')
-    return redirect(url_for('views.cart'))
-  else:
-    rows = Cart.query.filter(Cart.id).count()
-    return render_template('item.html', user=current_user, current_item=get_items()[id-1], rows = rows)
-
-@views.route('/delete/<int:id>')
-def delete(id):
-  item_to_delete = Cart.query.get_or_404(id)
-  try:
-    db.session.delete(item_to_delete)
-    db.session.commit()
-    flash('Item removed from cart')
-    return redirect(url_for('views.cart'))
-  except:
-    flash('Problem removing item from cart')
-    return redirect(url_for('views.cart'))
-
-@views.route('/clearcart')
-def clearcart():
-  num_of_items_in_cart = [id[0] for id in Cart.query.with_entities(Cart.id).all()]
-  for item in num_of_items_in_cart:
-    item_to_delete = Cart.query.get_or_404(item)
-    try:
-      db.session.delete(item_to_delete)
-      db.session.commit()
-    except:
-      flash('Problem removing ', item_to_delete.name, ' from cart.' )
-  flash('All items removed from cart!')
-  return redirect(url_for('views.cart'))
-
-@views.route('/cart', methods=['GET', 'POST'])
-def cart():
-  rows = Cart.query.filter(Cart.id).count()
-  return render_template('cart.html', user=current_user, item=get_cart_items(), rows=rows)
-
-@views.route('/create-checkout-session', methods=['POST'])
-def create_checkout_session():
-    session = stripe.checkout.Session.create(
-    line_items=[{
-      'price_data': {
-        'currency': 'usd',
-        'product_data': {
-          'name': 'Pizza',
-        },
-        'unit_amount': 1999,
-      },
-      'quantity': 1,
-    }],
-    mode='payment',
-    success_url='http://127.0.0.1:5000/successful',
-    cancel_url='http://127.0.0.1:5000/cart',
-  )
-    return redirect(session.url, code=303)
-
-@views.route('/successful', methods=['GET', 'POST'])
+# this is our function for successful.html it holds all python code needed in order to properly display the page
+# this function needs a lot of work as this page will contain much more information.
+@views.route('/successful')
 def successful():
+  # find the number of items in cart
   rows = Cart.query.filter(Cart.id).count()
   return render_template('successful.html', user=current_user, rows=rows)
 
-@views.route('/admin', methods=['POST', 'GET'])
-def admin():
-  if request.method == 'POST':
-    name = request.form.get('name')
-    price = request.form.get('price')
-    description = request.form.get('description')
-    image = request.files['image']
-    if image and allowed_file(image.filename):
-      filename = secure_filename(image.filename)
-      image.save(os.path.join(UPLOAD_FOLDER, filename))
-    imagename = filename
-    add_item = Items(name=name, price=price, description=description, item_image=imagename)
-    db.session.add(add_item)
-    db.session.commit()
-    flash('Added to Menu', category='success')
-    return redirect(url_for('views.admin'))
-  user_id = current_user.id
-  if user_id != 1:
-    return redirect(url_for('views.home'))
-  else:
-    rows = Cart.query.filter(Cart.id).count()
-    return render_template('admin.html', user=current_user, items=get_items(), rows=rows)
-
-@views.route('/remove_menu_item/<int:id>')
-def remove_menu_item(id):
-  item_to_delete = Items.query.get_or_404(id)
-  try:
-    db.session.delete(item_to_delete)
-    db.session.commit()
-    ids = [id[0] for id in Items.query.with_entities(Items.id).all()] # fixed
-    new_id = 1
-    for i in ids:
-      _id = Items.query.get(i)
-      _id.id = new_id
-      new_id += 1
-      db.session.commit()
-    flash('Item removed from menu')
-    return redirect(url_for('views.admin'))
-  except:
-    flash('Problem removing item from cart')
-    return redirect(url_for('views.admin'))
-
-def get_items():
-  ids = [id[0] for id in Items.query.with_entities(Items.id).all()] # fixed
-  test_items = []
-  for id in ids:
-    item = Items.query.filter_by(id=id).first()
-    grabber = {'id': 0, 'name': '', 'price': 0, 'desc': '', 'img': '', 'toppings': ['']}
-    grabber['id'] = item.id
-    grabber['name'] = item.name
-    grabber['price'] = item.price
-    grabber['desc'] = item.description
-    grabber['img'] = item.item_image
-    test_items.append(grabber)
-  return test_items
-
-def get_cart_items():
-  ids = [id[0] for id in Cart.query.with_entities(Cart.id).all()]
-  test_cart_items = []
-  names = []
-  for id in ids:
-    cart = Cart.query.filter_by(id=id).first()
-    grabber = {'id': 0, 'name': '', 'price': 0, 'quantity': 0}
-    grabber['id'] = id
-    grabber['price'] = cart.price
-    grabber['quantity'] = cart.quantity
-    grabber['name'] = cart.name
-    for _name in names:
-      if _name == cart.name:
-        grabber['quantity'] += 1
-        for _item in range(len(test_cart_items)):
-          if test_cart_items[_item]['name'] in names and test_cart_items[_item]['quantity'] < grabber['quantity'] and grabber['name'] == test_cart_items[_item]['name']:
-            del test_cart_items[_item]
-            break
-    names.append(cart.name)
-    test_cart_items.append(grabber)
-  return test_cart_items
-
-def allowed_file(filename):
-    return '.' in filename and \
-            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS

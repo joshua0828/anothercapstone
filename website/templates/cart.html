@@ -28,7 +28,7 @@
                     <div class="col"> <a href="#">-</a><a class="border">{{ items.quantity }}</a><a href="#">+</a> </div>
                     <div class="col">${{ items.price }}
                         <span class="close">
-                            <a href="{{ url_for('views.delete', id=items.id)}}">&#10005;</a>
+                            <a href="{{ url_for('cart.delete', id=items.id)}}">&#10005;</a>
                         </span>
                     </div>
                 </div>
@@ -39,8 +39,8 @@
             {% endif %}
             <br/><br/>
             <div class="buttons-inside-cart">
-                <a href="{{ url_for ('views.menu') }}">&leftarrow; Back to shop</a><span class="text-muted"></span>
-                <a href="{{ url_for ('views.clearcart') }}">&#10005; Remove all items</a><span class="text-muted"></span>
+                <a href="{{ url_for ('menu.website_menu') }}">&leftarrow; Back to shop</a><span class="text-muted"></span>
+                <a href="{{ url_for ('cart.clearcart') }}">&#10005; Remove all items</a><span class="text-muted"></span>
             </div>
 
         </div>
@@ -70,5 +70,5 @@
         </div>
     </div>
 </div>
-
+<br/><br/><br/><br/><br/><br/><br/>
 {% endblock %}

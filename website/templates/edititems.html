@@ -71,8 +71,8 @@
               <p class="card-text">{{ item.name }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="{{ url_for ('views.item', id=item.id) }}"><button type="button" class="btn btn-sm btn-outline-secondary">Edit</button></a>
-                  <a href="  {{ url_for ('views.remove_menu_item', id=item.id) }}"><button type="button" class="btn btn-sm btn-outline-secondary">Delete</button></a>
+                  <a href="{{ url_for ('menu.item', id=item.id) }}"><button type="button" class="btn btn-sm btn-outline-secondary">Edit</button></a>
+                  <a href="  {{ url_for ('admin.remove_menu_item', id=item.id) }}"><button type="button" class="btn btn-sm btn-outline-secondary">Delete</button></a>
                 </div>
                 <small class="text-muted">${{ item.price }}</small>
               </div>
@@ -84,5 +84,8 @@
     </div>
   </div>
 
+  <br/><br/>
+
+  
 
 {% endblock %}

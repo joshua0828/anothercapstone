@@ -1,3 +1,4 @@
+import imp
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
@@ -27,8 +28,15 @@ def create_app():
     # importing views and auth from views and auth .py
     from .views import views # found in views.py
     from .auth import auth # found in auth.py
+    from .menu import menu
+    from .admin import admin
+    from .cart import cart
     app.register_blueprint(views, url_prefix='/') # registering blueprints routes from views.py
-    app.register_blueprint(auth, url_prefix='/') # registering blueprints routes from auth.py 
+    app.register_blueprint(auth, url_prefix='/') # registering blueprints routes from auth.py
+    app.register_blueprint(menu, url_prefix='/')
+    app.register_blueprint(admin, url_prefix='/')
+    app.register_blueprint(cart, url_prefix='/')
+
 
     from .models import User # ensures database classes are created when starting up server
     create_database(app) # created database
@@ -45,7 +53,7 @@ def create_app():
     return app # end of create app
 
 
-# the function that creates database if its not already 
+# the function that creates database if its not already
 def create_database(app):
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)

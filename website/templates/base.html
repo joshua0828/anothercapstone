@@ -14,6 +14,7 @@
       href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="../static/base.css">
     <title>{% block title %}Home{% endblock %}</title>
   </head>
   <body>
@@ -37,17 +38,43 @@
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
           {% if user.is_authenticated %}
-            {% if user.id == 1 %}
-            <a class="nav-item nav-link" id="home" href="/admin">Admin</a>
-            {% endif %}
           <a class="nav-item nav-link" id="home" href="/">Home</a>
-          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
-          <a class="nav-item nav-link" id="menu" href="/menu">Menu</a>
-          <a class="nav-item nav-link" id="cart" href="/cart">Cart ({% block cart %}0{% endblock %})</a>
+          <a class="nav-item nav-link" id="menu" href="/website-menu">Menu</a>
+          <a class="nav-item nav-link" id="cart" href="/website-cart">Cart ({% block cart %}0{% endblock %})</a>
+            {% if user.id == 1 %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Admin</a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/edititems">Edit items</a>
+                  <a class="dropdown-item" href="/editusers">Edit users</a>
+                  <a class="dropdown-item" href="/logout">Logout</a>
+              </div>
+            </li>
+            {% else %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Hey, {{user.first_name}}</a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="/logout">Logout</a>
+              </div>
+            </li>
+            {% endif %}
           {% else %}
-          <a class="nav-item nav-link" id="login" href="/login">Login</a>
-          <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Sign in/up</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" id="login" href="/login">Login</a>
+              <a class="dropdown-item" id="signUp" href="/sign-up">Sign Up</a>
+              <a class="dropdown-item" id="employee-login" href="#">Employee login</a>
+            </div>
+          </li>
           {% endif %}
+
+          
+          
+          
         </div>
       </div>
     </nav>
@@ -89,9 +116,9 @@
       crossorigin="anonymous"
     ></script>
   </body>
-  <footer class="footer">
-    <div class="container">
-      <span class="text-muted">Place sticky footer content here.</span>
+  <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">
+    <div class="container text-center">
+      <small>Copyright &copy; Your Website</small>
     </div>
   </footer>
 </html>

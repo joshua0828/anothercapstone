@@ -1,0 +1,82 @@
+{% extends "base.html" %} {% block title %}Cart{% endblock %}
+{% block cart %}{{rows}}{% endblock %}
+
+{% block content%}
+<br/><br/>
+<form method="POST">
+    <h3 align="center">Register New Employee</h3>
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        placeholder="Enter email"
+      />
+    </div>
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="firstName"
+        name="firstName"
+        placeholder="Enter first name"
+      />
+    </div>
+    <div class="form-group">
+        <label for="phone">Phone number</label>
+        <input
+          type="text"
+          class="form-control"
+          id="phone"
+          name="phone"
+          placeholder="Enter phone number"
+        />
+      </div>
+    <div class="form-group">
+      <label for="password1">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password1"
+        name="password1"
+        placeholder="Enter password"
+      />
+    </div>
+    <div class="form-group">
+      <label for="password2">Password (Confirm)</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password2"
+        name="password2"
+        placeholder="Confirm password"
+      />
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <br /><br />
+
+  <!-- add for loop to get users and display user information -->
+  <h3>Remove Store Account</h3>
+  <br/>
+  <div class="row gx-4 gx-lg-5">
+    {% for i in account %}
+    <div class="col-md-4 mb-5">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="card-title">{{i.first_name}}</h2>
+                <p class="card-text">{{i.email}} </p>
+                <p class="card-text">{{i.phone}}</p>
+            </div>
+            <div class="card-footer"><a class="btn btn-primary btn-sm" href="#!">remove location</a></div>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+  <br/><br/>
+  {% endblock %}

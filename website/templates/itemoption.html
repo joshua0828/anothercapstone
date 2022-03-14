@@ -53,5 +53,26 @@
     <br/><button type="submit" class="btn btn-primary">Add Item</button>
 </form>
 
+<br/><br/>
+
+<h3>Remove Option</h3>
+<br/>
+<div class="row gx-4 gx-lg-5">
+  {% for i in options %}
+  <div class="col-md-4 mb-5">
+      <div class="card h-100">
+          <div class="card-body">
+              <h2 class="card-title">{{i.name}}</h2>
+              <p class="card-text">{{i.price}} </p>
+              <p class="card-text">{{i.description}}</p>
+          </div>
+          <div class="card-footer"><a class="btn btn-primary btn-sm" href="{{ url_for ('admin.remove_option', id=i.id) }}">remove option</a></div>
+      </div>
+  </div>
+  {% endfor %}
+</div>
+
+<br/><br/>
+
 
 {% endblock %}

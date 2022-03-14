@@ -74,8 +74,11 @@ def create_users():
       flash('Password must be at least 7 characters.', category='error')
     else:
       # create new user by passing data into variable called 'new_user'
-      new_store = Store(email=email, address=address, phone=phone, password=generate_password_hash(
-          password1, open=open, method='sha256'))
+      new_store = Store(email=email,
+      address=address,
+      phone=phone,
+      open=open,
+      password=generate_password_hash(password1, method='sha256'))
       # pass new_user into database
       db.session.add(new_store)
       # save database with new_user passed
@@ -104,8 +107,6 @@ def addoptions():
         rows = Cart.query.filter(Cart.id).count()
         return render_template('itemoption.html', user=current_user, rows=rows, options=get_options())
 
-
-
 @admin.route('/remove_menu_item/<int:id>')
 def remove_menu_item(id):
   item_to_delete = Item.query.get_or_404(id)
@@ -125,9 +126,50 @@ def remove_menu_item(id):
     flash('Problem removing item from cart')
     return redirect(url_for('admin.create_items'))
 
+@admin.route('/remove_option/<int:id>')
+def remove_option(id):
+  option_to_delete = Option.query.get_or_404(id)
+  try:
+    db.session.delete(option_to_delete)
+    db.session.commit()
+    
+    # reassign ids so there in a good order
+    ids = [id[0] for id in Option.query.with_entities(Option.id).all()] # fixed
+    new_id = 1
+    for i in ids:
+      _id = Option.query.get(i)
+      _id.id = new_id
+      new_id += 1
+      db.session.commit()
 
+    flash('Item removed from menu')
+    return redirect(url_for('admin.addoptions'))
+  except:
+    flash('Problem removing item from cart')
+    return redirect(url_for('admin.addoptions'))
+
+@admin.route('/remove_user/<int:id>')
+def remove_user(id):
+  option_to_delete = Store.query.get_or_404(id)
+  try:
+    db.session.delete(option_to_delete)
+    db.session.commit()
+    
+    # reassign ids so there in a good order
+    ids = [id[0] for id in Store.query.with_entities(Store.id).all()] # fixed
+    new_id = 1
+    for i in ids:
+      _id = Store.query.get(i)
+      _id.id = new_id
+      new_id += 1
+      db.session.commit()
+
+    flash('Store removed')
+    return redirect(url_for('admin.create_users'))
+  except:
+    flash('Problem removing Store')
+    return redirect(url_for('admin.create_users'))
 
 def allowed_file(filename):
     return '.' in filename and \
             filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-

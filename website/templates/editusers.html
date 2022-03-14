@@ -27,14 +27,15 @@
     </div>
 
     <div class="form-group">
-      <label for="open">Open?</label>
-      <input
-        type="open"
-        class="form-control"
-        id="open"
-        name="open"
-        placeholder="Enter open"
-      />
+      <label for="open">Order types allowed</label>
+      <select name="open" class="form-control" id="open">
+        <option value="1">Pick-up</option>
+        <option value="2">Delivery</option>
+        <option value="3">Pick-up and Delivery</option>
+        <option value="4">In person only</option>
+        <option value="5">All of above</option>
+        <option value="6">Closed</option>
+      </select>
     </div>
 
     <div class="form-group">
@@ -86,7 +87,7 @@
                 <p class="card-text">{{i.email}} </p>
                 <p class="card-text">{{i.phone}}</p>
             </div>
-            <div class="card-footer"><a class="btn btn-primary btn-sm" href="#!">remove location</a></div>
+            <div class="card-footer"><a class="btn btn-primary btn-sm" href="{{ url_for ('admin.remove_user', id=i.id) }}">remove location</a></div>
         </div>
     </div>
     {% endfor %}

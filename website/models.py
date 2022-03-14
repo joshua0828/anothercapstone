@@ -38,7 +38,6 @@ class Item(db.Model):
     description = db.Column(db.String(500))
     category = db.Column(db.Integer) # Helps create different sections of menu and similar items section
     item_image = db.Column(db.String(40))
-    option_id = db.Column(db.Integer, db.ForeignKey('option.id'))
 
 class Option(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -47,12 +46,12 @@ class Option(db.Model):
     description = db.Column(db.String(500))
     category = db.Column(db.Integer)
 
-
 class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
     price = db.Column(db.Integer)
     quantity = db.Column(db.Integer)
+    item_image = db.Column(db.String(40))
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)

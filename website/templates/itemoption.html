@@ -1,0 +1,57 @@
+{% extends "base.html" %} {% block title %}Cart{% endblock %}
+{% block cart %}{{rows}}{% endblock %}
+
+{% block content%}
+
+<form method="POST" enctype="multipart/form-data">
+    <br/>
+    <h3>Options</h3>
+    
+    <div class="form-group">
+      <label for="name">Option name</label>
+      <input
+        type="name"
+        class="form-control"
+        id="name"
+        name="name"
+        placeholder="Option name"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input
+        type="price"
+        class="form-control"
+        id="price"
+        name="price"
+        placeholder="Additional price"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input
+        type="description"
+        class="form-control"
+        id="description"
+        name="description"
+        placeholder="description"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category Name</label>
+      <select name="category" class="form-control" id="category">
+        <option value="1">Pizza</option>
+        <option value="2">Sides</option>
+        <option value="3">Desserts</option>
+        <option value="4">Drinks</option>
+      </select>
+    </div>
+
+    <br/><button type="submit" class="btn btn-primary">Add Item</button>
+</form>
+
+
+{% endblock %}

@@ -1,9 +1,12 @@
 # blueprint for all menu related functions go in this file the blueprint itslef is named 'menu'
 
+from unicodedata import category
+from click import option
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import current_user
 from . import db
-from .models import Cart, Item
+from .models import Cart, Item, Option, Store
+
 
 # blueprint named menu, this needs to be added to __init__
 menu = Blueprint('menu', __name__)
@@ -44,7 +47,8 @@ def item(id):
   else:
     # return the html along with the info to be displayed
     rows = Cart.query.filter(Cart.id).count()
-    return render_template('item.html', user=current_user, current_item=get_items()[id-1], rows = rows)
+    
+    return render_template('item.html', user=current_user, current_item=get_items()[id-1], options=get_options(), rows=rows)
 
 
 # helper function for multiple functions in the program
@@ -59,13 +63,42 @@ def get_items():
     # the same as id being evaluated by the for loop (taken by variable ids).
     item = Item.query.filter_by(id=id).first()
     # declare starting key values (these values dont matter at all they will be replaced below)
-    grabber = {'id': 0, 'name': '', 'price': 0, 'desc': '', 'img': '', 'toppings': ['']}
+    grabber = {'id': 0, 'name': '', 'price': 0, 'desc': '', 'img': '', 'category': 0, 'options': ''}
     # replace values that dont matter in grabber with values from item
     grabber['id'] = item.id
     grabber['name'] = item.name
     grabber['price'] = item.price
     grabber['desc'] = item.description
     grabber['img'] = item.item_image
+    grabber['category'] = item.category
     # append grabber to test_items (which we return)
     test_items.append(grabber)
   return test_items
+
+def get_stores():
+  ids = [id[0] for id in Store.query.with_entities(Store.id).all()]
+  all_stores = []
+  for id in ids:
+    store = Store.query.filter_by(id=id).first()
+    grabber = {'id': 0, 'first_name': '', 'email': 0, 'password': '', 'phone': ''}
+    grabber['id'] = store.id
+    grabber['first_name'] = store.address
+    grabber['email'] = store.email
+    grabber['password'] = store.password
+    grabber['phone'] = store.phone
+    all_stores.append(grabber)
+  return all_stores
+
+def get_options():
+    ids = [id[0] for id in Option.query.with_entities(Option.id).all()]
+    all_options = []
+    for id in ids:
+        option = Option.query.filter_by(id=id).first()
+        grabber = {'id':0, 'name':'', 'price':0, 'description': '', 'category': 0}
+        grabber['id'] = option.id
+        grabber['name'] = option.name
+        grabber['price'] = option.price
+        grabber['description'] = option.description
+        grabber['category'] = option.category
+        all_options.append(grabber)
+    return all_options

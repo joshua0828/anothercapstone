@@ -7,19 +7,21 @@
     <div class="container">
         <p>{{ current_item.desc }}</p>
         <p>
-          {% for topping in current_item.toppings %}
-          <input type="checkbox" id="id_{{topping}}" name="toppings" value="{{topping}}">
-          <label for="id_{{topping}}">{{ topping }}</label><br>
+          {% for i in options %}
+            {% if i.category == current_item.category %}
+              <input type="checkbox" id="options" name="options">
+              <label for="options">{{ i.name }} + {{i.price}}</label><br>
+            {% endif %}
           {% endfor %}
         </p>
         
         <form method="POST">
           <div class="form-group">
             <label for="name"></label>
-            <input 
+            <input
             type="hidden"
-            id="name" 
-            name="name" 
+            id="name"
+            name="name"
             value="{{current_item.name}}"
             />
           </div>

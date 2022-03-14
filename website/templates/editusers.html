@@ -4,7 +4,7 @@
 {% block content%}
 <br/><br/>
 <form method="POST">
-    <h3 align="center">Register New Employee</h3>
+    <h3 align="center">Register New Location</h3>
     <div class="form-group">
       <label for="email">Email Address</label>
       <input
@@ -16,15 +16,27 @@
       />
     </div>
     <div class="form-group">
-      <label for="firstName">First Name</label>
+      <label for="address">Store address</label>
       <input
-        type="text"
+        type="address"
         class="form-control"
-        id="firstName"
-        name="firstName"
-        placeholder="Enter first name"
+        id="address"
+        name="address"
+        placeholder="Enter address"
       />
     </div>
+
+    <div class="form-group">
+      <label for="open">Open?</label>
+      <input
+        type="open"
+        class="form-control"
+        id="open"
+        name="open"
+        placeholder="Enter open"
+      />
+    </div>
+
     <div class="form-group">
         <label for="phone">Phone number</label>
         <input
@@ -35,6 +47,7 @@
           placeholder="Enter phone number"
         />
       </div>
+    
     <div class="form-group">
       <label for="password1">Password</label>
       <input

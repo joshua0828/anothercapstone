@@ -1,5 +1,5 @@
 import imp
-from flask import Flask
+from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
@@ -30,15 +30,17 @@ def create_app():
     from .auth import auth # found in auth.py
     from .menu import menu
     from .admin import admin
+    from .store import store
     from .cart import cart
     app.register_blueprint(views, url_prefix='/') # registering blueprints routes from views.py
     app.register_blueprint(auth, url_prefix='/') # registering blueprints routes from auth.py
     app.register_blueprint(menu, url_prefix='/')
     app.register_blueprint(admin, url_prefix='/')
+    app.register_blueprint(store, url_prefix='/')
     app.register_blueprint(cart, url_prefix='/')
 
 
-    from .models import User # ensures database classes are created when starting up server
+    from .models import User, Store, Employee # ensures database classes are created when starting up server
     create_database(app) # created database
     
     # login stuff
@@ -48,7 +50,12 @@ def create_app():
     
     @login_manager.user_loader
     def load_user(id):
-        return User.query.get(int(id))
+        if session['account-type'] == 'User':
+            return User.query.get(int(id))
+        elif session['account-type'] == 'Store':
+            return Store.query.get(int(id))
+        elif session['account-type'] == 'Employee':
+            return Employee.query.get(int(id))
 
     return app # end of create app
 

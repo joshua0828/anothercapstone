@@ -19,6 +19,7 @@ class User(db.Model, UserMixin):
 class Employee(db.Model, UserMixin): # store employee info to show admin whos working and who will handle delivery requests
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True) # for login
+    password = db.Column(db.String(150))
     phone = db.Column(db.String(150)) # for automated text about current delivery
     first_name = db.Column(db.String(150)) # admin to quicky identify employee
     onclock = db.Column(db.Integer) # config if dilvery driver is able to

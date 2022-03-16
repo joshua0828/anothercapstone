@@ -5,7 +5,7 @@ from click import option
 from flask import Blueprint, render_template, flash, url_for, redirect, request
 from flask_login import current_user
 from . import db
-from .models import Cart, Item, Option, Store
+from .models import Cart, Employee, Item, Option, Store
 
 
 # blueprint named menu, this needs to be added to __init__
@@ -88,6 +88,20 @@ def get_stores():
     grabber['phone'] = store.phone
     all_stores.append(grabber)
   return all_stores
+
+def get_employees():
+  ids = [id[0] for id in Employee.query.with_entities(Employee.id).all()]
+  all_employees = []
+  for id in ids:
+    employee = Employee.query.filter_by(id=id).first()
+    grabber = {'id': 0, 'first_name': '', 'email': 0, 'password': '', 'phone': ''}
+    grabber['id'] = employee.id
+    grabber['first_name'] = employee.first_name
+    grabber['email'] = employee.email
+    grabber['password'] = employee.password
+    grabber['phone'] = employee.phone
+    all_employees.append(grabber)
+  return all_employees
 
 def get_options():
     ids = [id[0] for id in Option.query.with_entities(Option.id).all()]

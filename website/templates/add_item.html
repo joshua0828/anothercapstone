@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block title %}Add item{% endblock %} {% block
+content %}
+<form method="POST">
+  <h3 align="center">Add item to database</h3>
+  <div class="form-group">
+    <label for="itemName">Item Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="itemName"
+      name="itemName"
+      placeholder="Enter item name"
+    />
+  </div>
+  <div class="form-group">
+    <label for="itemPrice">Item Price</label>
+    <input
+      type="text"
+      class="form-control"
+      id="itemPrice"
+      name="itemPrice"
+      placeholder="Enter item price"
+    />
+  </div>
+  <div class="form-group">
+    <label for="itemDesc">Item Description</label>
+    <input
+      type="text"
+      class="form-control"
+      id="itemDesc"
+      name="itemDesc"
+      placeholder="Enter item description"
+    />
+  </div>
+  <div class="form-group">
+    <label for="itemDiet">Item Dietary information</label>
+    <input
+      type="text"
+      class="form-control"
+      id="itemDiet"
+      name="itemDiet"
+      placeholder="Enter item dietary information"
+    />
+  </div>
+  <br />
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

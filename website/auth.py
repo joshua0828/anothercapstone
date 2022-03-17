@@ -43,7 +43,7 @@ def employee_login():
             session['account-type'] = 'Store'
         elif request.form['store-login'] == 'Employee':
             user = Employee.query.filter_by(email=email).first()
-            session['account-type'] == 'Employee'
+            session['account-type'] = 'Employee'
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')

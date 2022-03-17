@@ -34,14 +34,14 @@ def edit_employees():
     elif len(password1) < 7:
       flash('Password must be at least 7 characters.', category='error')
     else:
-      # create new user by passing data into variable called 'new_user'
+      # create new user by passing data into variable called 'new_employee'
       new_employee = Employee(email=email,
       first_name=first_name,
       phone=phone,
       password=generate_password_hash(password1, method='sha256'))
-      # pass new_user into database
+      # pass new_employee into database
       db.session.add(new_employee)
-      # save database with new_user passed
+      # save database with new_employee passed
       db.session.commit()
       flash('Employee created!', category='success')
       return redirect(url_for('store.edit_employees'))
@@ -71,3 +71,7 @@ def remove_employee(id):
   except:
     flash('Problem removing Employee')
     return redirect(url_for('store.edit_employees'))
+
+@store.route('/current-orders', methods=['POST', 'GET'])
+def current_orders():
+  return render_template('currentorders.html', user=current_user)

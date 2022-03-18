@@ -83,4 +83,6 @@ def get_cart_items():
     test_cart_items.append(grabber)
   return test_cart_items
 
-
+# TODO Used to create orders for stores/employees to view/update
+def create_order(price, name):
+  return

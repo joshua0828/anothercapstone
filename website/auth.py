@@ -1,7 +1,9 @@
 # routes having to do with any type of authorization goes here
 
-from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
+from multiprocessing.sharedctypes import Value
+import re
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from .models import User, Store, Employee
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 # this is why user mixin needed to be added to user model
@@ -17,6 +19,7 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
         user = User.query.filter_by(email=email).first()
+        session['account-type'] = 'User'
         if user:
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
@@ -27,6 +30,30 @@ def login():
         else:
             flash('Email does not exist.', category='error')
     return render_template("login.html", user=current_user)
+
+# employee login route
+@auth.route('/employee-login', methods=['GET', 'POST'])
+def employee_login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        # Check for login as Employee or as Store Manager
+        if request.form['store-login'] == 'Manager':
+            user = Store.query.filter_by(email=email).first()
+            session['account-type'] = 'Store'
+        elif request.form['store-login'] == 'Employee':
+            user = Employee.query.filter_by(email=email).first()
+            session['account-type'] = 'Employee'
+        if user:
+            if check_password_hash(user.password, password):
+                flash('Logged in successfully!', category='success')
+                login_user(user, remember=True)
+                return redirect(url_for('views.home'))
+            else:
+                flash('Incorrect password, try again.', category='error')
+        else:
+            flash('Email does not exist.', category='error')
+    return render_template("employeelogin.html", user=current_user)
 
 
 # logout route

@@ -1,14 +1,12 @@
 # routes having to do with any type of authorization goes here
 
-from multiprocessing.sharedctypes import Value
-import re
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from .models import User, Store, Employee
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 # this is why user mixin needed to be added to user model
 from flask_login import login_user, login_required, logout_user, current_user
-
+from .getters import alert
 
 auth = Blueprint('auth', __name__)
 
@@ -94,3 +92,33 @@ def sign_up():
             flash('Account created!', category='success')
             return redirect(url_for('views.home'))
     return render_template("sign_up.html", user=current_user)
+
+@auth.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = User.query.filter_by(email=email).first()
+        if user:
+            alert('pizza night password reset', 'your new password is 7654321', user.email)
+            flash('Your new password has been sent to your email', category='success')
+        else:
+            flash('Email does not exsist! Sign up now!', category='error')
+
+    return render_template("forgotpassword.html", user=current_user)
+
+@auth.route('/reset-password', methods=['GET', 'POST'])
+def reset_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = User.query.filter_by(email=email).first()
+        if user:
+            alert('pizza night password reset', 'your new password is 7654321', user.email)
+            flash('Your new password has been sent to your email', category='success')
+        else:
+            flash('Email does not exsist! Sign up now!', category='error')
+
+    return render_template("forgotpassword.html", user=current_user)
+
+
+
+

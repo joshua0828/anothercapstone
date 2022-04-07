@@ -57,4 +57,10 @@ class Cart(db.Model):
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
+    customer_name = db.Column(db.String(150))
+    quantity = db.Column(db.Integer)
     stat = db.Column(db.Integer) # 1,2,3 order status accepted, on the way, completed
+
+class Discount(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    discount_info = db.Column(db.Integer) # type of discount
